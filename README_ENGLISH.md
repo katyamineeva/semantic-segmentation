@@ -17,6 +17,7 @@ Mentor -- Vadim Gorbachev
 Analyze labeled aerial photographs and automate classification of objects on the image. 
 In this project dataset include high quality aerial photographs of German cities Vaihingen and Potsdam. Each pixel should be classified as a member of the following types of objects:
 
+
 * Impervious surfaces
 * Building
 * Low vegetation
@@ -42,22 +43,19 @@ Moreover, Ground Truth images (manually labeled) are provided for some aerial ph
 
 For solving this problem supervised Machine Learning was applied. Process of segmentation can be divided into several steps:
 
-1. Presegmentation of image into small "superpixels". 
-
+1. Presegmentation of image into small "superpixels".
 Due to the high resolution of images, analyzing each pixel separately from others requires hard time-consuming computations. Futhermore, features of a group of similar pixels give more information than the features of the only one pixel. As an algorithm for presegmentation was chosen SLIC (Simple Linear Iterative Clustering) due to its efficiency and consistency of segments, it produces.
 
 2. Indicating features.
-
 At this moment was indicated following features:
-
-....* color
-....* color of adjacent pixels
-....* maximum value for each channel in RGB model
-....* height of objects
-....* variance of height
-....* shape and edges of objects
-....* probability of each class 
-....* etc.
+    * color
+    * color of adjacent pixels
+    * maximum value for each channel in RGB model
+    * height of objects
+    * variance of height
+    * shape and edges of objects
+    * probability of each class 
+    * etc.
 
 3. Choice of the classifier.
 Currently, Random Forest Classifier was chosen, however, it's planed to replace it with more advanced one in the future.
@@ -80,4 +78,4 @@ Currently, Random Forest Classifier was chosen, however, it's planed to replace 
 
 3. Third checkpoint - 29 May - 3 June 2017
     * Implementation of more complicated features and methods 
-    * Submitting the final version in the contest
+* Submitting the final version in the contest
