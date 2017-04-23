@@ -8,7 +8,7 @@ Project  <br />
 in terms of automatic labeling aerial photographs»  <br />
 </h2>
 <h3 align="center">
-Mentor -- Vadim Gorbachev
+Mentor — Vadim Gorbachev
 </h3>
  <br />
 
@@ -44,10 +44,12 @@ Moreover, Ground Truth images (manually labeled) are provided for some aerial ph
 For solving this problem supervised Machine Learning was applied. Process of segmentation can be divided into several steps:
 
 1. Presegmentation of image into small "superpixels".
-Due to the high resolution of images, analyzing each pixel separately from others requires hard time-consuming computations. Futhermore, features of a group of similar pixels give more information than the features of the only one pixel. As an algorithm for presegmentation was chosen SLIC (Simple Linear Iterative Clustering) due to its efficiency and consistency of segments, it produces.
+
+    Due to the high resolution of images, analyzing each pixel separately from others requires hard time-consuming computations. Futhermore, features of a group of similar pixels give more information than the features of the only one pixel. As an algorithm for presegmentation was chosen SLIC (Simple Linear Iterative Clustering) due to its efficiency and consistency of segments, it produces.
 
 2. Indicating features.
-At this moment was indicated following features:
+
+    At this moment was indicated following features:
     * color
     * color of adjacent pixels
     * maximum value for each channel in RGB model
@@ -58,7 +60,8 @@ At this moment was indicated following features:
     * etc.
 
 3. Choice of the classifier.
-Currently, Random Forest Classifier was chosen, however, it's planed to replace it with more advanced one in the future.
+
+    Currently, Random Forest Classifier was chosen, however, it's planed to replace it with more advanced one in the future.
 
 4. Analysis of accuracy, f1 score, precision and recall and further development and optimisation.
 
@@ -78,4 +81,4 @@ Currently, Random Forest Classifier was chosen, however, it's planed to replace 
 
 3. Third checkpoint - 29 May - 3 June 2017
     * Implementation of more complicated features and methods 
-* Submitting the final version in the contest
+    * Submitting the final version in the contest
