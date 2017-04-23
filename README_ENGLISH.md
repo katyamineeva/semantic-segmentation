@@ -50,14 +50,14 @@ Due to the high resolution of images, analyzing each pixel separately from other
 
 At this moment was indicated following features:
 
-* color
-* color of adjacent pixels
-* maximum value for each channel in RGB model
-* height of objects
-* variance of height
-* shape and edges of objects
-* probability of each class 
-* etc.
+....* color
+....* color of adjacent pixels
+....* maximum value for each channel in RGB model
+....* height of objects
+....* variance of height
+....* shape and edges of objects
+....* probability of each class 
+....* etc.
 
 3. Choice of the classifier.
 Currently, Random Forest Classifier was chosen, however, it's planed to replace it with more advanced one in the future.
