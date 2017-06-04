@@ -2,18 +2,8 @@
 from __future__ import division
 import cv2
 import numpy as np
-
-
-IMP_SURF = (255, 255, 255)
-BUILDING = (0, 0, 255)
-LOW_VEG = (0, 255, 255)
-TREE = (0, 255, 0)
-CAR = (255, 255, 0)
-CLUTTER = (255, 0, 0)
-
-objectTypes = [IMP_SURF, BUILDING, LOW_VEG, TREE, CAR, CLUTTER]
-objectNames = {IMP_SURF : "IMP_SURF", BUILDING : "BUILDING", LOW_VEG : "LOW_VEG", TREE : "TREE", CAR : "CAR", CLUTTER : "CLUTTER"}
-
+from sklearn.metrics import accuracy_score
+from namespace import *
 
 def equiv(a, b):
     return ((a[0] == b[0]) and (a[1] == b[1]) and (a[2] == b[2]))
@@ -50,7 +40,11 @@ def getTN(obj, comporation):
     
     
 
-def accuracy(imgResult = cv2.imread('to_test.tif'), imgIdeal = cv2.imread('to_test1.tif')):
+def my_accuracy(imgResult = cv2.imread('to_test.tif'), imgIdeal = cv2.imread('to_test1.tif')):
+    try:
+        cv2.imwrite("my_seg.tif", imgResult)
+    except:
+        pass
     
     detectedOnImage = dict.fromkeys(objectTypes, False)
 
@@ -107,11 +101,30 @@ def accuracy(imgResult = cv2.imread('to_test.tif'), imgIdeal = cv2.imread('to_te
             if  (precision[obj] + recall[obj]) > 0:
                 f1[obj] = (2 * precision[obj] * recall[obj]) / (precision[obj] + recall[obj])
                 print "f1", f1[obj]
-            accuracy[obj] = (tp + tn) / (tp + tn + fp + fn)    
-            print "accuracy", accuracy[obj], "\n"
+
+        TP = sum([getTP(obj, comporation) for obj in objectTypes])
+        TN = sum([getTN(obj, comporation) for obj in objectTypes])
+        FP = sum([getFP(obj, comporation) for obj in objectTypes])
+        FN = sum([getFN(obj, comporation) for obj in objectTypes])
+
+        accuracy = (TP + TN) / (TP + FP + TN + FN)    
+        print "\n accuracy", accuracy, "\n"
             
 
+def compute_accuracy(test_set):
+    average_accuracy = 0.0
 
-#accuracy()
-    
-cv2.waitKey()
+    for num in test_set:
+        result_image = get_result_image(num)
+        gt_image = get_gt_image(num)
+
+        cur_accuracy = np.mean(result_image == gt_image)
+        average_accuracy += cur_accuracy
+        print "accuracy of segmentation picture ", num, " = ", cur_accuracy
+    average_accuracy /= len(test_set)
+    print "avarage accuracy = ", average_accuracy
+
+
+
+#accuracy_1()   
+#cv2.waitKey()

@@ -1,28 +1,19 @@
-import cv2
 from skimage.segmentation import slic
 from skimage.segmentation import mark_boundaries
 from skimage.util import img_as_float
 from skimage import io
 import matplotlib.pyplot as plt
-from accuracy_evaluation import accuracy
-import numpy as np
-
-IMP_SURF = (255, 255, 255)
-BUILDING = (0, 0, 255)
-LOW_VEG = (0, 255, 255)
-TREE = (0, 255, 0)
-CAR = (255, 255, 0)
-CLUTTER = (255, 0, 0)
-
-objectTypes = [IMP_SURF, BUILDING, LOW_VEG, TREE, CAR, CLUTTER]
+import os
+import cPickle
+from namespace import *
 
 
 
-def slic_segmentation(filename, display = False, numSegments = 200):
+def slic_segmentation(filename, numSegments = 300, sig = 5, display = False):
     image = img_as_float(io.imread(filename))
     
     # sigma smoothing Gaussian kernel, unnessesary parameter 
-    segments = slic(image, n_segments = numSegments, sigma = 5, convert2lab = True)
+    segments = slic(image, n_segments = numSegments, sigma = sig, convert2lab = True)
     if display:
         fig = plt.figure("Superpixels -- %d segments" % (numSegments))
         ax = fig.add_subplot(1, 1, 1)
@@ -37,35 +28,36 @@ def slic_segmentation(filename, display = False, numSegments = 200):
 
 
 
-def equiv(a, b):
-    return ((a[0] == b[0]) and (a[1] == b[1]) and (a[2] == b[2]))
+# list_of_segments -- 2d array
+# list_of_segments[i] -- an array of pixel coordinates in segment i
 
-
-
-def get_list_of_segments(mask, cnt_of_segments, num):
+def compute_list_of_segments(mask):
+    cnt_of_segments = max([max(row) for row in mask]) + 1
     list_of_segments = [[]  for i in range(cnt_of_segments)]
 
     for i in range(len(mask)):
         for j in range(len(mask[i])):
             segment_num = mask[i][j]
             list_of_segments[segment_num].append(tuple([i, j]))
-    list_of_segments = np.asarray(list_of_segments)
-    list_of_segments.tofile("list_of_segments_" + str(num) + ".txt", ", ")
-    
     return list_of_segments
 
 
+# ------------------------------------------------------------
+# the only one function, which is used outside this file
+# num -- picture num 
+def presegmentation(num, num_segments = 300, sigma = 5):
+    pathname = os.path.expanduser("~/Pictures/project") + "/superpixels"
+    if not os.path.exists(pathname):
+        os.mkdir(pathname)
 
-def presegmentation(num):
-    photo_top = "top" + str(num) + ".tif"
-    image_top = cv2.imread(photo_top)
+    filename = os.path.expanduser("~/Pictures/project") + "/top/top_mosaic_09cm_area" + str(num) + ".tif"
 
-    mask = slic_segmentation(photo_top, numSegments = 300)
-    mask.tofile("mask_of_" + str(num) + "_image.txt", ", ")
-    cnt_of_segments = max([max(row) for row in mask]) + 1
-    return mask
-
-
-
-#presegmentation_accuracy()
-
+    mask = slic_segmentation(filename, numSegments = num_segments, sig = sigma)
+    filename = os.path.expanduser("~/Pictures/project") + "/superpixels/mask" + str(num)
+    cPickle.dump(mask, open(filename, "wb+"))
+    
+    list_of_segments = compute_list_of_segments(mask)
+    filename = os.path.expanduser("~/Pictures/project") + "/superpixels/list_of_segments" + str(num)
+    cPickle.dump(list_of_segments, open(filename, "wb+")) 
+    
+##presegmentation(1)
