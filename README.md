@@ -1,22 +1,10 @@
-<h3 align="center">
-Mineeva Ekaterina  <br />
-NRU HSE CSD AMI-152 <br />
-Project  <br />
-</h3>
-<h2 align="center">
-«Semanic segmentation of images  <br />
-in terms of automatic labeling aerial photographs»  <br />
-</h2>
-<h3 align="center">
-Mentor — Vadim Gorbachev
-</h3>
- <br />
+# [Contest](http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html) on semanic segmentation of aerial images
 
-#### Task
+Second year course project at [CS department](https://cs.hse.ru/en/) of the Higher school of Ecominics. 
 
-Analyze labeled aerial photographs and automate classification of objects on the image. 
-In this project dataset include high quality aerial photographs of German cities Vaihingen and Potsdam. Each pixel should be classified as a member of the following types of objects:
+### Goal
 
+Label each pixel of an image with one of the following marks:
 
 * Impervious surfaces
 * Building
@@ -25,8 +13,9 @@ In this project dataset include high quality aerial photographs of German cities
 * Car
 * Clutter/background
 
-Each aerial photograph is complemented by: 
+### Dataset
 
+Dataset provided by the organizers of the competition include:
 
 * TOP – true orthophoto
 * DSM – digital surface model
@@ -35,50 +24,29 @@ Each aerial photograph is complemented by:
 * CII – color-infrared image 
 
 
-Moreover, Ground Truth images (manually labeled) are provided for some aerial photographs. It allows to apply methods of Machine Learning to that problem. Also currently, [contest](http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html) are opened and everyone can compete with other participants in accuracy of their solutions.
+### Algorithm steps
 
- <br />
 
-#### Methods
+#### 1. Presegmentation of image into so-called superpixels.
 
-For solving this problem supervised Machine Learning was applied. Process of segmentation can be divided into several steps:
+Pre-segmentation allows to extract more imformation from pixels by gathering similar ones together. This procedure also decreases the number of objects and, consequently, improvers classification efficeincy. For pre-segmentation I use SLIC (Simple Linear Iterative Clustering).
 
-1. Presegmentation of image into small "superpixels".
+#### 2. Features extraction.
 
-    Due to the high resolution of images, analyzing each pixel separately from others requires hard time-consuming computations. Futhermore, features of a group of similar pixels give more information than the features of the only one pixel. As an algorithm for presegmentation was chosen SLIC (Simple Linear Iterative Clustering) due to its efficiency and consistency of segments, it produces.
+In the final version each superpixel is classified based on the following features:
+    
+ * average color
+ * average color of adjacent superpixels
+ * maximum value for each channel in RGB model
+ * height of objects
+ * variance of height
 
-2. Indicating features.
+Also, I tried to train a simple CNN to form an embedding of superpixels into vector space. However, this step didn't improve algorithm's performance, therefore I removed it from the final version. (Note, that it was my first experience with CNNs, so maybe, CNN features can improve algorithm's performance and I just did something wrong :)
 
-    At this moment was indicated following features:
-    * color
-    * color of adjacent pixels
-    * maximum value for each channel in RGB model
-    * height of objects
-    * variance of height
-    * shape and edges of objects
-    * probability of each class 
-    * etc.
+#### 3. Classification.
 
-3. Choice of the classifier.
+In the final version I use Random Forest as a classifier. I aslo tried Gradient Boosting, which gave almost the same results.
 
-    Currently, Random Forest Classifier was chosen, however, it's planed to replace it with more advanced one in the future.
+### Results
 
-4. Analysis of accuracy, f1 score, precision and recall and further development and optimisation.
-
- <br />
-
-#### Implementation steps
-
-1. First checkpoint - 17 December 2016:
-    * Specification of the problem and learning about methods of Machine Learning
-    * implementation of presentation and evaluation of error
-
-2. Second checkpoint - 25 March 2017:
-    * Choice of features 
-    * Implementation based on Random Forest classifier
-    * Evaluation of results of segmentation
-    * Plan of further development
-
-3. Third checkpoint - 29 May - 3 June 2017
-    * Implementation of more complicated features and methods 
-    * Submitting the final version in the contest
+Final accuracy achived by cross-validation is 89%.
