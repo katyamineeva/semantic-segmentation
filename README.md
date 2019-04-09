@@ -1,4 +1,4 @@
-# [Contest](http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html) on semanic segmentation of aerial images
+# [Contest](http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html) on semantic segmentation of aerial images
 
 Second year course project at [CS department](https://cs.hse.ru/en/) of the Higher school of Ecominics. 
 
